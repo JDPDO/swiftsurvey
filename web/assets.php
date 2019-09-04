@@ -40,6 +40,7 @@ function parse_conifg($name, $type = CONFIG_TYPES::INI){
             throw new Exception('Not implemented yet.'); 
             break;
     }
+    return $file_configuration;
 }
 
 /**
@@ -48,9 +49,10 @@ function parse_conifg($name, $type = CONFIG_TYPES::INI){
  * @return void
  */
 function include_libs(){
+    $used_libs = parse_conifg('lib.ini');
     $item_array = array_diff(scandir($_GLOBAL['path_lib']), array('..', '.'));
     foreach($item_array as $item){
-        include_asset($item);
+        if(array_key_exists(pathinfo($item)['filename'], $used_libs)) include_lib($item);
     }
 }
 
@@ -72,9 +74,10 @@ function include_asset($name)
  * @return void
  */
 function include_modules(){
+    $used_libs = parse_conifg('modules.ini');
     $item_array = array_diff(scandir($_GLOBAL['path_modules']), array('..', '.'));
     foreach($item_array as $item){
-        include_asset($item);
+        if(array_key_exists(pathinfo($item)['filename'], $used_libs)) include_module($item);
     }
 }
 
