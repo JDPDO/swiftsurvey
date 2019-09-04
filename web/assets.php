@@ -94,5 +94,5 @@ function include_module($name)
 }
 
 include_libs();
-include_assets();
+include_modules();
 ?>
