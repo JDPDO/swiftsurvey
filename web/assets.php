@@ -63,7 +63,7 @@ function include_libs(){
  * 
  * @return void
  */
-function include_asset($name)
+function include_lib($name)
 {
     include($_GLOBAL['path_lib'] . $name);
 }
@@ -92,4 +92,7 @@ function include_module($name)
 {
     include($_GLOBAL['path_modules'] . $name);
 }
+
+include_libs();
+include_assets();
 ?>
