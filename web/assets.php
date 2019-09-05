@@ -7,6 +7,7 @@
 
 /* Init global variables. */
 // Init path values
+
 $_GLOBAL['path_root'] = dirname(__DIR__);
 $_GLOBAL['path_assets'] = $_GLOBAL['path_root'] . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR;
 $_GLOBAL['path_config'] = $_GLOBAL['path_root'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
@@ -28,9 +29,11 @@ class CONFIG_TYPES{ const INI = 0; const JSON = 1; }
  * 
  * @return array
  */
-function parse_conifg($name, $type = CONFIG_TYPES::INI){
+function parse_config($name, $type = CONFIG_TYPES::INI){
+    global $_GLOBAL;
     $file_path = $_GLOBAL['path_config'] . $name;
     $file_configuration;
+    $file_configuration = parse_ini_file($file_path);
     switch($type){
         default:
         case CONFIG_TYPES::INI:
@@ -49,10 +52,12 @@ function parse_conifg($name, $type = CONFIG_TYPES::INI){
  * @return void
  */
 function include_libs(){
-    $used_libs = parse_conifg('lib.ini');
-    $item_array = array_diff(scandir($_GLOBAL['path_lib']), array('..', '.'));
+    global $_GLOBAL;
+    $used_libs = parse_config('lib.ini');
+    $item_array = scandir($_GLOBAL['path_lib']);//array_diff(scandir($_GLOBAL['path_lib']), array('..', '.'));
     foreach($item_array as $item){
-        if(array_key_exists(pathinfo($item)['filename'], $used_libs)) include_lib($item);
+        $pathinfo = pathinfo($item);
+        if(!empty($pathinfo['extension']) && array_key_exists($pathinfo['filename'], $used_libs)) include_lib($item);
     }
 }
 
@@ -65,6 +70,7 @@ function include_libs(){
  */
 function include_lib($name)
 {
+    global $_GLOBAL;
     include($_GLOBAL['path_lib'] . $name);
 }
 
@@ -74,7 +80,8 @@ function include_lib($name)
  * @return void
  */
 function include_modules(){
-    $used_libs = parse_conifg('modules.ini');
+    global $_GLOBAL;
+    $used_libs = parse_config('modules.ini');
     $item_array = array_diff(scandir($_GLOBAL['path_modules']), array('..', '.'));
     foreach($item_array as $item){
         if(array_key_exists(pathinfo($item)['filename'], $used_libs)) include_module($item);
@@ -90,9 +97,21 @@ function include_modules(){
  */
 function include_module($name)
 {
+    global $_GLOBAL;
     include($_GLOBAL['path_modules'] . $name);
 }
 
+// function b($text){
+//     return '<b class="uk-text-bold">' . $text . '</b>';
+// }
+
+// function i($text){
+//     return '<i class="uk-text-italic">' . $text . '</i>';
+// }
+
 include_libs();
 include_modules();
+//var_dump(parse_config('swiftsurvey.ini')['setup_finished']);
+$_GLOBAL['config_swiftsurvey'] = parse_config('swiftsurvey.ini')['setup_finished'];
+//var_dump($_GLOBAL['config_swiftsurvey']);
 ?>
