@@ -101,17 +101,16 @@ function include_module($name)
     include($_GLOBAL['path_modules'] . $name);
 }
 
-// function b($text){
-//     return '<b class="uk-text-bold">' . $text . '</b>';
-// }
+function b($text){
+    return '<b class="uk-text-bold">' . $text . '</b>';
+}
 
-// function i($text){
-//     return '<i class="uk-text-italic">' . $text . '</i>';
-// }
+function i($text){
+    return '<i class="uk-text-italic">' . $text . '</i>';
+}
 
 include_libs();
 include_modules();
-//var_dump(parse_config('swiftsurvey.ini')['setup_finished']);
+
 $_GLOBAL['config_swiftsurvey'] = parse_config('swiftsurvey.ini')['setup_finished'];
-//var_dump($_GLOBAL['config_swiftsurvey']);
 ?>
